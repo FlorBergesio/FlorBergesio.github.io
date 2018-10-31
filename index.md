@@ -3,8 +3,30 @@
 A continuación pueden copiar o descargar los archivos necesarios para el Taller de Videojuegos - Pacman para móviles
 
 ### Imágenes
+Icono de Pacman
+![Icono de Pacman](https://FlorBergesio.github.io/Sprites/pacman-icon.png)
+
+Sprite de Pacman
+![Sprite de Pacman](https://FlorBergesio.github.io/Sprites/pacman.png)
+
+Sprite de Laberinto
+![Sprite de Laberinto](https://FlorBergesio.github.io/Sprites/maze.png)
+
+Sprite de Tile Map
+![Sprite de Tile Map](https://FlorBergesio.github.io/Sprites/TileMap.png)
+
+Sprite de Comida o Pac-dots
+![Sprite de Comida o Pac-dots](https://FlorBergesio.github.io/Sprites/food.png)
+
+Sprites de Fantasmas y otros
+![Sprite de Fantasma Blinky](https://FlorBergesio.github.io/Sprites/blinky.png)
+![Sprite de Fantasma Inky](https://FlorBergesio.github.io/Sprites/inky.png)
+![Sprite de Fantasma Pinky](https://FlorBergesio.github.io/Sprites/pinky.png)
+![Sprite de Fantasma Clyde](https://FlorBergesio.github.io/Sprites/clyde.png)
+![Sprite miscelaneos](https://FlorBergesio.github.io/Sprites/others.png)
 
 ### SFX
+[Link](https://github.com/FlorBergesio/FlorBergesio.github.io/tree/master/SFX)
 
 ### Códigos
 
