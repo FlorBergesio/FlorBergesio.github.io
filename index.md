@@ -1,37 +1,146 @@
-## Welcome to GitHub Pages
+## Pacman Clon
 
-You can use the [editor on GitHub](https://github.com/FlorBergesio/FlorBergesio.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+A continuación pueden copiar o descargar los archivos necesarios para el Taller de Videojuegos - Pacman para móviles
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Imágenes
 
-### Markdown
+### SFX
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Códigos
+
+PacmanBehaviour.cs
 
 ```markdown
-Syntax highlighted code block
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityStandardAssets.CrossPlatformInput;
 
-# Header 1
-## Header 2
-### Header 3
+public class PacmanBehaviour : MonoBehaviour {
+	public float speed = 0.2f;
+	float dirX,dirY;
+	Vector2 destination = Vector2.zero;
+	public int foodQuantity;
+	public SceneChanger sceneChanger;
 
-- Bulleted
-- List
+	void Start () {
+		destination = transform.position;
+		foodQuantity = GameObject.FindGameObjectsWithTag ("Food").Length;
+	}
 
-1. Numbered
-2. List
+	void Update () {
+		dirX = CrossPlatformInputManager.GetAxis ("Horizontal");
+		if (Input.GetKey ("left") || Input.GetKey ("right"))
+			dirX = Input.GetAxis ("Horizontal");
+		dirY = CrossPlatformInputManager.GetAxis ("Vertical");
+		if (Input.GetKey ("up") || Input.GetKey ("down"))
+			dirY = Input.GetAxis ("Vertical");
+	}
 
-**Bold** and _Italic_ and `Code` text
+	void FixedUpdate(){
+		Vector2 p = Vector2.MoveTowards (transform.position, destination, speed);
+		GetComponent<Rigidbody2D> ().MovePosition (p);
 
-[Link](url) and ![Image](src)
+		if (dirX > 0.1 && validMovement (Vector2.right)) 
+			destination = (Vector2)transform.position + Vector2.right;
+		if (dirX < -0.1 && validMovement (-Vector2.right)) 
+			destination = (Vector2)transform.position - Vector2.right;
+		if (dirY > 0.1 && validMovement (Vector2.up)) 
+			destination = (Vector2)transform.position + Vector2.up;
+		if (dirY < -0.1 && validMovement (-Vector2.up)) 
+			destination = (Vector2)transform.position - Vector2.up;
+
+		Vector2 direction = destination - (Vector2)transform.position;
+		GetComponent<Animator> ().SetFloat ("DirX", direction.x);
+		GetComponent<Animator> ().SetFloat ("DirY", direction.y);
+	}
+
+	bool validMovement (Vector2 dir) {
+		Vector2 pos = transform.position;
+		RaycastHit2D hit = Physics2D.Linecast (pos + dir, pos);
+		return (hit.collider == GetComponent<Collider2D> ());
+	}
+
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.tag == "Food") {
+			foodQuantity--;
+			if (foodQuantity ==0)
+				sceneChanger.ChangeSceneTo ("PacmanWinScene");
+		}
+	}
+}
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+FoodBehaviour.cs
 
-### Jekyll Themes
+```markdown
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/FlorBergesio/FlorBergesio.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+public class FoodBehaviour : MonoBehaviour {
+	public static int scorePoints;
+	public Text scoreText;
 
-### Support or Contact
+	void Start() {
+		scorePoints = 0; 
+	}
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.tag == "Player") {
+			Destroy (gameObject);
+			scorePoints++;
+			scoreText.text = "Score: " + scorePoints.ToString ();
+		}
+	}
+}
+```
+
+GhostBehaviour.cs
+
+```markdown
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GhostBehaviour : MonoBehaviour {
+	public Transform[] waypoints;
+	int current = 0;
+	public float speed = 0.15f;
+	public SceneChanger sceneChanger;
+
+	void FixedUpdate () {
+		if (transform.position != waypoints [current].position) {
+			Vector2 p = Vector2.MoveTowards (transform.position, waypoints [current].position, speed);
+			GetComponent<Rigidbody2D> ().MovePosition (p);
+			GetComponent<Animator> ().SetFloat ("DirX", p.x);
+			GetComponent<Animator> ().SetFloat ("DirY", p.y);
+		} else
+			current = (current + 1) % waypoints.Length;
+	}
+
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.tag == "Player") {
+			Destroy (other.gameObject);
+			sceneChanger.ChangeSceneTo ("PacmanGameOver");
+		}
+	}
+}
+```
+
+SceneChanger.cs
+
+```markdown
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class SceneChanger : MonoBehaviour {
+
+	public void ChangeSceneTo(string sceneName){
+		SceneManager.LoadScene (sceneName);
+	}
+}
+```
