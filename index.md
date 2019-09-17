@@ -168,7 +168,7 @@ public class SceneChanger : MonoBehaviour {
 ```
 
 ### Información de contacto
-Instagram: @WeepingSirenArt
-Correo oficial: ing.florencia.bergesio@gmail.com
-Correo arte/diseño: weeping.siren.art@gmail.com
-Portafolio: behance.net/florbergesio
+### Instagram: @WeepingSirenArt
+### Correo oficial: ing.florencia.bergesio@gmail.com
+### Correo arte/diseño: weeping.siren.art@gmail.com
+### Portafolio: behance.net/florbergesio
